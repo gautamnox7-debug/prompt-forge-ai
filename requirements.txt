@@ -1,0 +1,2 @@
+# Standard library only for CLI; optional utilities
+colorama>=0.4.6
