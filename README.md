@@ -2,17 +2,28 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
-[![AI-Powered](https://img.shields.io/badge/AI-First-6366F1.svg)](#)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-6366F1.svg?style=for-the-badge&logo=github)](https://gautamnox7-debug.github.io/prompt-forge-ai/)
 [![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](#)
 
-> **PromptForge AI** is a curated suite of production-grade system prompts, templates, and an interactive CLI prompt optimizer designed for Gemini, Claude, and OpenAI models.
+> **PromptForge AI** is a curated suite of production-grade system prompts, templates, and an interactive web playground designed for Gemini, Claude, and OpenAI models.
+
+---
+
+## 🌐 Live Interactive Playground
+
+Experience the toolkit directly in your browser:  
+👉 **[Open PromptForge Web App](https://gautamnox7-debug.github.io/prompt-forge-ai/)**
+
+* ⚡ 1-Click Copy Production System Prompts
+* 🛠️ Interactive AI Prompt Enhancer
+* 📱 Responsive Dark-Mode UI
 
 ---
 
 ## 🌟 Highlights & Features
 
 - 🎯 **Production System Prompts**: Tested prompts for Code Architecting, Bug Hunting, Autonomous Agents, and API Schema Designers.
-- ⚡ **Interactive CLI Optimizer**: Quickly test, format, and export prompts directly from terminal.
+- ⚡ **Interactive CLI & Web Optimizer**: Quickly test, format, and export prompts directly from terminal or browser.
 - 🧩 **Zero-Shot & Few-Shot Templates**: Ready-to-copy prompts formatted for maximum reasoning accuracy.
 - 🛡️ **Jailbreak-Resistant Guardrails**: Built-in system instructions to avoid hallucinations and maintain deterministic outputs.
 
@@ -22,11 +33,7 @@
 
 ```bash
 prompt-forge-ai/
-├── templates/
-│   ├── code_architect.md       # Full-stack system prompt
-│   ├── bug_triage_expert.md    # Error analysis and debugging prompt
-│   ├── autonomous_agent.md     # Agentic decision-making loop
-│   └── json_schema_enforcer.md # Deterministic structured output
+├── index.html                  # Live Web Playground UI
 ├── prompt_forge.py             # Interactive Python CLI tool
 ├── requirements.txt            # Minimal dependencies
 ├── LICENSE                     # MIT Open Source
@@ -35,7 +42,7 @@ prompt-forge-ai/
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (CLI)
 
 ### 1. Clone the repository
 ```bash

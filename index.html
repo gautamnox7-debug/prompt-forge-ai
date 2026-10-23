@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptForge AI | Interactive Prompt Engineering Toolkit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+  <!-- Navigation -->
+  <nav class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight">Prompt<span class="gradient-text">Forge</span> AI</span>
+          <span class="text-xs text-slate-400 block -mt-1">by @gautamnox7-debug</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium py-2 px-4 rounded-lg border border-slate-700 transition duration-200">
+          <i class="fa-brands fa-github text-base"></i>
+          <span>Star on GitHub</span>
+          <span class="bg-indigo-500/20 text-indigo-300 text-xs px-2 py-0.5 rounded-full border border-indigo-500/30">⭐</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="py-16 text-center px-4 relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 flex items-center justify-center">
+      <div class="w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -translate-x-32"></div>
+    </div>
+    
+    <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Production AI Prompts & Templates</span>
+    </div>
+    
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight">
+      Architect Better AI Responses with <span class="gradient-text">Precision Prompts</span>
+    </h1>
+    <p class="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mt-5 leading-relaxed">
+      Curated production-grade system instructions for Gemini, Claude, and GPT-4. Copy, enhance, and deploy in seconds.
+    </p>
+
+    <!-- Stats pills -->
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
+        <i class="fa-solid fa-check-double text-green-400"></i>
+        <span>Zero-Hallucination Guardrails</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
+        <i class="fa-solid fa-microchip text-indigo-400"></i>
+        <span>Gemini 2.5 & GPT-4o Ready</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
+        <i class="fa-solid fa-code text-purple-400"></i>
+        <span>100% Open Source MIT</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 flex-grow w-full">
+
+    <!-- Interactive Prompt Enhancer Tool -->
+    <section class="glass-card rounded-2xl p-6 sm:p-8 mb-14 border border-indigo-500/30 shadow-2xl relative">
+      <div class="flex items-center space-x-3 mb-6">
+        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-white">Interactive Prompt Enhancer</h2>
+          <p class="text-xs text-slate-400">Turn a rough thought into a high-precision system prompt instantly</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">Your Rough Goal or Task</label>
+          <textarea id="rawPromptInput" rows="5" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-150" placeholder="e.g. Write a python script to parse CSV and send webhook alerts for anomalies..."></textarea>
+          
+          <div class="flex items-center space-x-4 mt-4">
+            <select id="modelTarget" class="bg-slate-900 border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2.5 focus:outline-none focus:border-indigo-500">
+              <option value="gemini">Target: Google Gemini</option>
+              <option value="gpt4">Target: OpenAI GPT-4o</option>
+              <option value="claude">Target: Anthropic Claude</option>
+            </select>
+            <button onclick="enhancePrompt()" class="flex-grow bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition duration-200 shadow-lg shadow-indigo-600/30 flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-sparkles"></i>
+              <span>Generate Precision Prompt</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Optimized System Prompt</label>
+            <button onclick="copyEnhanced()" id="copyEnhancedBtn" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copy Output</span>
+            </button>
+          </div>
+          <div id="enhancedOutput" class="w-full h-44 bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 overflow-y-auto whitespace-pre-wrap select-all">
+Click "Generate Precision Prompt" to see the transformed prompt with role definitions, boundary guardrails, and output schema formatting.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Template Showcase Cards -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-white">Production System Prompts</h2>
+        <p class="text-slate-400 text-sm mt-1">Copy and paste these directly into your AI configuration or API calls</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="templatesGrid">
+      <!-- Card 1 -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="bg-indigo-500/10 text-indigo-400 text-xs font-medium px-3 py-1 rounded-full border border-indigo-500/20">
+              <i class="fa-solid fa-cubes mr-1.5"></i> Architecture
+            </span>
+            <span class="text-xs text-slate-500 font-mono">ID: ARCH-01</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Principal Software Architect</h3>
+          <p class="text-slate-400 text-xs mb-4">Enforces SOLID principles, modular structure, strict error handling, and clean code conventions.</p>
+          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
+You are an Elite Principal Software Architect. Your job is to analyze requirements and produce clean, modular, production-grade solutions. 
+
+Guidelines:
+1. Always follow SOLID principles and state technical trade-offs.
+2. Specify exact file structure and modular boundaries.
+3. Write production-ready code with complete error handling.
+4. Avoid placeholders or truncated code.
+          </div>
+        </div>
+        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copy System Prompt</span>
+        </button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="bg-purple-500/10 text-purple-400 text-xs font-medium px-3 py-1 rounded-full border border-purple-500/20">
+              <i class="fa-solid fa-robot mr-1.5"></i> Autonomous Agent
+            </span>
+            <span class="text-xs text-slate-500 font-mono">ID: AGENT-02</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Agentic Reasoning Loop</h3>
+          <p class="text-slate-400 text-xs mb-4">Transforms models into autonomous loop agents using Observation-Thought-Action-Verification cycles.</p>
+          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
+You are an Autonomous AI Agent. For every task, reason step-by-step:
+1. Objective Decomposition: Break down the primary goal into prioritized atomic steps.
+2. Self-Correction: Question intermediate assumptions before moving forward.
+3. Action & Execution: Provide the precise commands or actions needed.
+4. Verification: Validate that the outcome satisfies the original objective.
+          </div>
+        </div>
+        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copy System Prompt</span>
+        </button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-medium px-3 py-1 rounded-full border border-emerald-500/20">
+              <i class="fa-solid fa-code mr-1.5"></i> Structured Output
+            </span>
+            <span class="text-xs text-slate-500 font-mono">ID: JSON-03</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Deterministic JSON Schema Enforcer</h3>
+          <p class="text-slate-400 text-xs mb-4">Completely eliminates chat greetings, markdown quotes, and ensures 100% valid parseable JSON output.</p>
+          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
+You are an API Data Synthesizer. Your output MUST be strict, valid JSON conforming directly to the requested schema.
+CRITICAL RULES:
+- Do NOT wrap output in markdown codeblocks (no ```json).
+- Do NOT provide greeting, preamble, or trailing commentary.
+- Return ONLY the raw, parseable JSON payload.
+          </div>
+        </div>
+        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copy System Prompt</span>
+        </button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="bg-amber-500/10 text-amber-400 text-xs font-medium px-3 py-1 rounded-full border border-amber-500/20">
+              <i class="fa-solid fa-bug mr-1.5"></i> Debugging
+            </span>
+            <span class="text-xs text-slate-500 font-mono">ID: BUG-04</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Root Cause Bug Hunter</h3>
+          <p class="text-slate-400 text-xs mb-4">Performs in-depth triage on error traces, isolated failing conditions, and gives unified git diffs.</p>
+          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
+You are a Senior Debugging Specialist. Analyze the error log or buggy code provided.
+Structure your diagnosis as follows:
+1. Root Cause Analysis (RCA): Explain why the failure occurs at the runtime level.
+2. Failing Condition: Identify the exact line, type mismatch, or state boundary.
+3. Solution Diff: Provide a complete drop-in replacement with fix.
+4. Prevention: Provide a test case asserting the fix.
+          </div>
+        </div>
+        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copy System Prompt</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        Created with AI precision by <a href="https://github.com/gautamnox7-debug" target="_blank" class="text-slate-300 hover:text-indigo-400 font-semibold underline decoration-indigo-500/50">Gautam Mishra (@gautamnox7-debug)</a>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="hover:text-slate-300">GitHub Repository</a>
+        <a href="https://github.com/gautamnox7-debug/gemini-agent-flow" target="_blank" class="hover:text-slate-300">GeminiAgentFlow</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-indigo-600 text-white px-5 py-3 rounded-xl shadow-2xl font-medium text-sm flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300 translate-y-4 z-50">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg">Copied to clipboard!</span>
+  </div>
+
+  <script>
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+    function copyText(button) {
+      const textContainer = button.parentElement.querySelector('.select-all');
+      const text = textContainer.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('System prompt copied to clipboard!');
+      });
+    }
+
+    function copyEnhanced() {
+      const text = document.getElementById('enhancedOutput').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Optimized prompt copied!');
+      });
+    }
+
+    function enhancePrompt() {
+      const input = document.getElementById('rawPromptInput').value.trim();
+      const model = document.getElementById('modelTarget').value;
+      const outputBox = document.getElementById('enhancedOutput');
+
+      if (!input) {
+        outputBox.innerText = "Please enter your rough goal or task in the box on the left first!";
+        return;
+      }
+
+      const enhanced = `[SYSTEM INSTRUCTION: EXPERT ASSISTANT FOR ${model.toUpperCase()}]
+
+ROLE & PERSONA:
+You are an expert specialist focused on delivering high-precision results for the user's objective.
+
+CORE OBJECTIVE:
+"${input}"
+
+OPERATIONAL CONSTRAINTS:
+1. Provide production-grade, immediately actionable output.
+2. State any critical architectural trade-offs or prerequisite assumptions.
+3. Eliminate redundant pleasantries; ground every claim in verifiable facts.
+4. Structure the response with clear headings, concise rationale, and clean code blocks.
+
+EXECUTION FORMAT:
+- Step 1: Technical Analysis & Strategy
+- Step 2: Implementation / Solution
+- Step 3: Verification & Edge-Case Checklist`;
+
+      outputBox.innerText = enhanced;
+      showToast('Prompt enhanced successfully!');
+    }
+  </script>
+</body>
+</html>
