@@ -1,348 +1,689 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromptForge AI | Interactive Prompt Engineering Toolkit</title>
+  <title>PromptForge — Precision Prompt Engineering & Autonomous Agent Framework</title>
+  
+  <!-- Modern Typography: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
           colors: {
-            brand: {
-              50: '#eef2ff',
-              400: '#818cf8',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca'
+            noir: {
+              950: '#030304',
+              900: '#070709',
+              850: '#0c0d10',
+              800: '#121318',
+              700: '#1d1e26',
+              600: '#2a2b37',
+              400: '#717384',
+              300: '#9d9fae',
+              100: '#e4e5eb'
             }
           }
         }
       }
     }
   </script>
+
   <style>
-    .gradient-text {
-      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    body {
+      background-color: #030304;
+      color: #e4e5eb;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      letter-spacing: -0.015em;
     }
-    .glass-card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* Ambient Hero Mesh Background */
+    .hero-mesh {
+      background: 
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% -10%, rgba(120, 120, 140, 0.15) 0%, transparent 60%);
     }
-    .glass-card:hover {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+
+    .ambient-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 70%, transparent 100%);
+    }
+
+    /* High-end Bento & Minimalist Card styling */
+    .bento-card {
+      background: #090a0d;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 18px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .bento-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.04), transparent 40%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+    }
+    .bento-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Minimal Top Pills */
+    .tag-pill {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: #9d9fae;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Code highlights */
+    pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050507;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1d1e26;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2a2b37;
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+<body class="antialiased">
 
-  <!-- Navigation -->
-  <nav class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <!-- Ambient Grid Background -->
+  <div class="fixed inset-0 ambient-grid pointer-events-none -z-10"></div>
+
+  <!-- Navbar -->
+  <nav class="border-b border-white/[0.06] bg-noir-950/80 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-          <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+        <div class="w-8 h-8 rounded-lg bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-white">
+          <i class="fa-solid fa-cube text-xs"></i>
         </div>
-        <div>
-          <span class="text-xl font-bold tracking-tight">Prompt<span class="gradient-text">Forge</span> AI</span>
-          <span class="text-xs text-slate-400 block -mt-1">by @gautamnox7-debug</span>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-semibold tracking-tight text-white">PromptForge</span>
+          <span class="text-[10px] text-noir-400 font-mono px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">v2.1</span>
         </div>
       </div>
-      <div class="flex items-center space-x-4">
-        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium py-2 px-4 rounded-lg border border-slate-700 transition duration-200">
-          <i class="fa-brands fa-github text-base"></i>
-          <span>Star on GitHub</span>
-          <span class="bg-indigo-500/20 text-indigo-300 text-xs px-2 py-0.5 rounded-full border border-indigo-500/30">⭐</span>
+
+      <div class="hidden md:flex items-center space-x-8 text-xs text-noir-400 font-medium">
+        <a href="#overview" class="hover:text-white transition">Overview</a>
+        <a href="#how-it-works" class="hover:text-white transition">How it Works</a>
+        <a href="#playground" class="hover:text-white transition">Playground</a>
+        <a href="#framework" class="hover:text-white transition">Architecture</a>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="h-8 px-3.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-medium text-white flex items-center space-x-2 transition">
+          <i class="fa-brands fa-github text-sm"></i>
+          <span>GitHub</span>
         </a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Header -->
-  <header class="py-16 text-center px-4 relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 flex items-center justify-center">
-      <div class="w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -translate-x-32"></div>
+  <!-- Hero Section (Matches Reference Image Style) -->
+  <section class="relative pt-28 pb-20 text-center px-6 hero-mesh overflow-hidden">
+    <!-- Top Pill -->
+    <div class="inline-block mb-6">
+      <div class="tag-pill">
+        <span class="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse"></span>
+        Prompt Architecture Engine
+      </div>
     </div>
-    
-    <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
-      <i class="fa-solid fa-bolt"></i>
-      <span>Production AI Prompts & Templates</span>
-    </div>
-    
-    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight">
-      Architect Better AI Responses with <span class="gradient-text">Precision Prompts</span>
+
+    <!-- Massive Minimalist Heading -->
+    <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.08]">
+      Modular Prompts Powered By AI Engine.
     </h1>
-    <p class="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mt-5 leading-relaxed">
-      Curated production-grade system instructions for Gemini, Claude, and GPT-4. Copy, enhance, and deploy in seconds.
+
+    <p class="text-noir-400 text-sm sm:text-base max-w-xl mx-auto mt-6 leading-relaxed font-normal">
+      Zero-hallucination. Agent-native. Guardrailed. Built to scale across LLM pipelines and autonomous workflows.
     </p>
 
-    <!-- Stats pills -->
-    <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
-      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
-        <i class="fa-solid fa-check-double text-green-400"></i>
-        <span>Zero-Hallucination Guardrails</span>
-      </div>
-      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
-        <i class="fa-solid fa-microchip text-indigo-400"></i>
-        <span>Gemini 2.5 & GPT-4o Ready</span>
-      </div>
-      <div class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-sm text-slate-300 flex items-center space-x-2">
-        <i class="fa-solid fa-code text-purple-400"></i>
-        <span>100% Open Source MIT</span>
-      </div>
+    <!-- Main Pill Action Button -->
+    <div class="mt-8 flex justify-center">
+      <a href="#playground" class="h-11 px-7 rounded-full bg-white text-black font-semibold text-xs tracking-tight flex items-center space-x-2 hover:bg-white/90 transition shadow-[0_0_30px_rgba(255,255,255,0.25)]">
+        <span>Enter the Prompt Engine</span>
+        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+      </a>
     </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 flex-grow w-full">
-
-    <!-- Interactive Prompt Enhancer Tool -->
-    <section class="glass-card rounded-2xl p-6 sm:p-8 mb-14 border border-indigo-500/30 shadow-2xl relative">
-      <div class="flex items-center space-x-3 mb-6">
-        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
-          <i class="fa-solid fa-sliders"></i>
+    <!-- Central Minimal Emblem (Like Reference Image) -->
+    <div class="mt-14 flex justify-center">
+      <div class="relative">
+        <div class="w-20 h-20 rounded-2xl bg-noir-900 border border-white/[0.12] flex items-center justify-center text-white shadow-2xl relative z-10">
+          <i class="fa-solid fa-microchip text-2xl text-white/90"></i>
         </div>
-        <div>
-          <h2 class="text-xl font-bold text-white">Interactive Prompt Enhancer</h2>
-          <p class="text-xs text-slate-400">Turn a rough thought into a high-precision system prompt instantly</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">Your Rough Goal or Task</label>
-          <textarea id="rawPromptInput" rows="5" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-150" placeholder="e.g. Write a python script to parse CSV and send webhook alerts for anomalies..."></textarea>
-          
-          <div class="flex items-center space-x-4 mt-4">
-            <select id="modelTarget" class="bg-slate-900 border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2.5 focus:outline-none focus:border-indigo-500">
-              <option value="gemini">Target: Google Gemini</option>
-              <option value="gpt4">Target: OpenAI GPT-4o</option>
-              <option value="claude">Target: Anthropic Claude</option>
-            </select>
-            <button onclick="enhancePrompt()" class="flex-grow bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition duration-200 shadow-lg shadow-indigo-600/30 flex items-center justify-center space-x-2">
-              <i class="fa-solid fa-sparkles"></i>
-              <span>Generate Precision Prompt</span>
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Optimized System Prompt</label>
-            <button onclick="copyEnhanced()" id="copyEnhancedBtn" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
-              <i class="fa-regular fa-copy"></i>
-              <span>Copy Output</span>
-            </button>
-          </div>
-          <div id="enhancedOutput" class="w-full h-44 bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 overflow-y-auto whitespace-pre-wrap select-all">
-Click "Generate Precision Prompt" to see the transformed prompt with role definitions, boundary guardrails, and output schema formatting.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Template Showcase Cards -->
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <h2 class="text-2xl font-bold tracking-tight text-white">Production System Prompts</h2>
-        <p class="text-slate-400 text-sm mt-1">Copy and paste these directly into your AI configuration or API calls</p>
+        <!-- Subtle back glow -->
+        <div class="absolute inset-0 bg-white/10 blur-2xl rounded-full -z-10"></div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="templatesGrid">
+    <!-- Monochrome Partner / Supported Models Bar -->
+    <div class="mt-20 pt-10 border-t border-white/[0.04] max-w-5xl mx-auto">
+      <p class="text-[11px] uppercase tracking-widest text-noir-400 font-mono mb-7">Interoperable across leading models & providers</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-14 text-noir-400 opacity-60">
+        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-brands fa-google text-sm"></i> <span>Google Gemini</span></div>
+        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-bolt text-sm"></i> <span>Anthropic Claude</span></div>
+        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-layer-group text-sm"></i> <span>OpenAI GPT-4o</span></div>
+        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-brands fa-github text-sm"></i> <span>GitHub Copilot</span></div>
+        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-cube text-sm"></i> <span>Antigravity</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: What is PromptForge? (Reference 3-Card Row) -->
+  <section id="overview" class="py-24 max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <div class="tag-pill mb-4">
+        <span>Introduction</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+        What is PromptForge ?
+      </h2>
+      <p class="text-noir-400 text-xs sm:text-sm max-w-xl mx-auto mt-3">
+        A production-grade prompt compute protocol built for deterministic output — bridging raw thoughts into verified, zero-hallucination agent instructions.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <!-- Card 1 -->
-      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="bg-indigo-500/10 text-indigo-400 text-xs font-medium px-3 py-1 rounded-full border border-indigo-500/20">
-              <i class="fa-solid fa-cubes mr-1.5"></i> Architecture
-            </span>
-            <span class="text-xs text-slate-500 font-mono">ID: ARCH-01</span>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">Principal Software Architect</h3>
-          <p class="text-slate-400 text-xs mb-4">Enforces SOLID principles, modular structure, strict error handling, and clean code conventions.</p>
-          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
-You are an Elite Principal Software Architect. Your job is to analyze requirements and produce clean, modular, production-grade solutions. 
-
-Guidelines:
-1. Always follow SOLID principles and state technical trade-offs.
-2. Specify exact file structure and modular boundaries.
-3. Write production-ready code with complete error handling.
-4. Avoid placeholders or truncated code.
-          </div>
+      <div class="bento-card p-6 flex items-start space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
+          <i class="fa-solid fa-server text-sm"></i>
         </div>
-        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
-          <i class="fa-regular fa-copy"></i>
-          <span>Copy System Prompt</span>
-        </button>
+        <div>
+          <h3 class="text-sm font-semibold text-white mb-1">Production System Templates</h3>
+          <p class="text-xs text-noir-400 leading-relaxed">
+            Curated, benchmarked system instructions with strict structural guardrails.
+          </p>
+        </div>
       </div>
 
       <!-- Card 2 -->
-      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="bg-purple-500/10 text-purple-400 text-xs font-medium px-3 py-1 rounded-full border border-purple-500/20">
-              <i class="fa-solid fa-robot mr-1.5"></i> Autonomous Agent
-            </span>
-            <span class="text-xs text-slate-500 font-mono">ID: AGENT-02</span>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">Agentic Reasoning Loop</h3>
-          <p class="text-slate-400 text-xs mb-4">Transforms models into autonomous loop agents using Observation-Thought-Action-Verification cycles.</p>
-          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
-You are an Autonomous AI Agent. For every task, reason step-by-step:
-1. Objective Decomposition: Break down the primary goal into prioritized atomic steps.
-2. Self-Correction: Question intermediate assumptions before moving forward.
-3. Action & Execution: Provide the precise commands or actions needed.
-4. Verification: Validate that the outcome satisfies the original objective.
-          </div>
+      <div class="bento-card p-6 flex items-start space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
+          <i class="fa-solid fa-gear text-sm"></i>
         </div>
-        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
-          <i class="fa-regular fa-copy"></i>
-          <span>Copy System Prompt</span>
-        </button>
+        <div>
+          <h3 class="text-sm font-semibold text-white mb-1">Real-Time Prompt Optimization</h3>
+          <p class="text-xs text-noir-400 leading-relaxed">
+            Converts vague instructions into step-by-step reasoning sequences automatically.
+          </p>
+        </div>
       </div>
 
       <!-- Card 3 -->
-      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-medium px-3 py-1 rounded-full border border-emerald-500/20">
-              <i class="fa-solid fa-code mr-1.5"></i> Structured Output
-            </span>
-            <span class="text-xs text-slate-500 font-mono">ID: JSON-03</span>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">Deterministic JSON Schema Enforcer</h3>
-          <p class="text-slate-400 text-xs mb-4">Completely eliminates chat greetings, markdown quotes, and ensures 100% valid parseable JSON output.</p>
-          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
-You are an API Data Synthesizer. Your output MUST be strict, valid JSON conforming directly to the requested schema.
-CRITICAL RULES:
-- Do NOT wrap output in markdown codeblocks (no ```json).
-- Do NOT provide greeting, preamble, or trailing commentary.
-- Return ONLY the raw, parseable JSON payload.
-          </div>
+      <div class="bento-card p-6 flex items-start space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
+          <i class="fa-solid fa-shield-halved text-sm"></i>
         </div>
-        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
-          <i class="fa-regular fa-copy"></i>
-          <span>Copy System Prompt</span>
-        </button>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between transition duration-200">
         <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="bg-amber-500/10 text-amber-400 text-xs font-medium px-3 py-1 rounded-full border border-amber-500/20">
-              <i class="fa-solid fa-bug mr-1.5"></i> Debugging
-            </span>
-            <span class="text-xs text-slate-500 font-mono">ID: BUG-04</span>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">Root Cause Bug Hunter</h3>
-          <p class="text-slate-400 text-xs mb-4">Performs in-depth triage on error traces, isolated failing conditions, and gives unified git diffs.</p>
-          <div class="bg-slate-900 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-300 mb-4 h-32 overflow-y-auto select-all">
-You are a Senior Debugging Specialist. Analyze the error log or buggy code provided.
-Structure your diagnosis as follows:
-1. Root Cause Analysis (RCA): Explain why the failure occurs at the runtime level.
-2. Failing Condition: Identify the exact line, type mismatch, or state boundary.
-3. Solution Diff: Provide a complete drop-in replacement with fix.
-4. Prevention: Provide a test case asserting the fix.
-          </div>
+          <h3 class="text-sm font-semibold text-white mb-1">Zero-Hallucination Guardrails</h3>
+          <p class="text-xs text-noir-400 leading-relaxed">
+            Eliminates conversational filler and ensures 100% valid schema extraction.
+          </p>
         </div>
-        <button onclick="copyText(this)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 rounded-lg text-xs border border-slate-700/80 flex items-center justify-center space-x-2 transition">
-          <i class="fa-regular fa-copy"></i>
-          <span>Copy System Prompt</span>
-        </button>
       </div>
     </div>
+  </section>
 
-  </main>
+  <!-- Section 2: How It Works (Reference 4-Column Tall Cards) -->
+  <section id="how-it-works" class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <div class="tag-pill mb-4">
+        <span>CHOOSE • DEPLOY • COMMAND • ITERATE</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+        How it Works
+      </h2>
+      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
+        Select a verified prompt node, tune operational constraints, and deploy directly to API loops.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- Card 1: Choose Node -->
+      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
+        <div>
+          <span class="text-[10px] font-mono text-noir-400 block mb-3">01 / NODE SELECTION</span>
+          <h3 class="text-sm font-semibold text-white mb-1.5">Choose Persona</h3>
+          <p class="text-xs text-noir-400">Select an architecture node from the registry or bring your custom logic.</p>
+        </div>
+        
+        <!-- Minimal Dark Card Graphic -->
+        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center items-center relative overflow-hidden">
+          <div class="w-14 h-14 rounded-full bg-noir-900 border border-white/[0.1] flex items-center justify-center text-white/70 shadow-inner">
+            <i class="fa-solid fa-code-branch text-sm"></i>
+          </div>
+          <span class="text-[10px] text-noir-400 font-mono mt-3">ARCH-PROMPT-01</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Deploy to Core -->
+      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
+        <div>
+          <span class="text-[10px] font-mono text-noir-400 block mb-3">02 / CONFIGURATION</span>
+          <h3 class="text-sm font-semibold text-white mb-1.5">Configure Constraints</h3>
+          <p class="text-xs text-noir-400">Set deterministic parameters, token budgets, and output schemas.</p>
+        </div>
+        
+        <!-- Minimal Dark Card Graphic -->
+        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center space-y-2 font-mono text-[10px]">
+          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
+            <span>temp: 0.1</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          </div>
+          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
+            <span>format: "raw_json"</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+          </div>
+          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
+            <span>guardrails: true</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/70"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Register + Publish -->
+      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
+        <div>
+          <span class="text-[10px] font-mono text-noir-400 block mb-3">03 / VERIFICATION</span>
+          <h3 class="text-sm font-semibold text-white mb-1.5">Autonomous Loop</h3>
+          <p class="text-xs text-noir-400">Verify reasoning chains before committing to production inference.</p>
+        </div>
+        
+        <!-- Minimal Dark Card Graphic -->
+        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center items-center">
+          <div class="w-16 h-16 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center justify-center text-noir-300">
+            <i class="fa-solid fa-arrows-rotate text-lg"></i>
+          </div>
+          <div class="w-full mt-3 h-7 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-between px-2 text-[10px] text-noir-400">
+            <span>Give any command...</span>
+            <i class="fa-solid fa-arrow-up text-[9px] text-white"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Playground Mode -->
+      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
+        <div>
+          <span class="text-[10px] font-mono text-noir-400 block mb-3">04 / INTEGRATION</span>
+          <h3 class="text-sm font-semibold text-white mb-1.5">Playground Mode</h3>
+          <p class="text-xs text-noir-400">Simulate, refine, and iterate agent behaviors in a safe runtime environment.</p>
+        </div>
+        
+        <!-- Minimal Dark Card Graphic (Code snippet window) -->
+        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 font-mono text-[9px] text-noir-400 overflow-hidden leading-tight flex flex-col justify-between">
+          <div class="flex items-center space-x-1.5 text-noir-600 border-b border-white/[0.04] pb-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-white/20"></span>
+            <span class="w-2 h-2 rounded-full bg-white/20"></span>
+            <span class="w-2 h-2 rounded-full bg-white/20"></span>
+          </div>
+          <pre class="text-noir-300"><code>{
+  "agent": "Autonomous",
+  "status": "Ready",
+  "auth": "PROMPT_TOKEN"
+}</code></pre>
+          <span class="text-emerald-400">✓ 0.04ms runtime</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Interactive Developer Playground (The Core Working Engine) -->
+  <section id="playground" class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <div class="tag-pill mb-4">
+        <span>DEVELOPER CONSOLE</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+        Precision Prompt Generator
+      </h2>
+      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
+        Input raw intentions below. The engine converts them into production system instructions.
+      </p>
+    </div>
+
+    <!-- Playground Bento Console -->
+    <div class="bento-card p-6 md:p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left: Input & Controls (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-5">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-[11px] uppercase tracking-wider font-mono text-noir-400">Task Objective</label>
+              <span class="text-[10px] text-noir-500 font-mono">Raw Input</span>
+            </div>
+            <textarea id="rawGoal" rows="6" class="w-full bg-noir-950 border border-white/[0.08] focus:border-white/30 rounded-xl p-4 text-xs font-mono text-white placeholder-noir-500 focus:outline-none transition resize-none leading-relaxed" placeholder="e.g. Build an autonomous web crawler that scrapes tech blogs, extracts key insights in JSON, and filters out clickbait..."></textarea>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-mono text-noir-400 uppercase tracking-wider">Target Model Architecture</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="selectModel('gemini', this)" class="model-btn h-9 rounded-lg bg-white/[0.08] border border-white/[0.18] text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
+                <i class="fa-brands fa-google text-[10px]"></i>
+                <span>Gemini</span>
+              </button>
+              <button onclick="selectModel('claude', this)" class="model-btn h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] text-noir-400 hover:text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
+                <i class="fa-solid fa-bolt text-[10px]"></i>
+                <span>Claude</span>
+              </button>
+              <button onclick="selectModel('gpt4o', this)" class="model-btn h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] text-noir-400 hover:text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
+                <i class="fa-solid fa-layer-group text-[10px]"></i>
+                <span>GPT-4o</span>
+              </button>
+            </div>
+          </div>
+
+          <button onclick="generateEnginePrompt()" class="w-full h-11 rounded-xl bg-white text-black font-semibold text-xs tracking-tight hover:bg-white/90 transition flex items-center justify-center space-x-2 shadow-lg shadow-white/10">
+            <i class="fa-solid fa-microchip text-xs"></i>
+            <span>Compile System Instruction</span>
+          </button>
+        </div>
+
+        <!-- Right: Compiled Output Terminal (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col justify-between">
+          <div class="bg-noir-950 border border-white/[0.08] rounded-xl p-5 h-full min-h-[340px] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/[0.06] pb-3 mb-4">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
+                  <span class="text-xs font-mono text-noir-300">compiled_instruction.txt</span>
+                </div>
+                <button onclick="copyGenerated()" id="copyBtn" class="text-xs font-mono text-noir-400 hover:text-white flex items-center space-x-1.5 transition">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy</span>
+                </button>
+              </div>
+
+              <div id="compiledCode" class="font-mono text-xs text-noir-300 whitespace-pre-wrap select-all leading-relaxed h-[270px] overflow-y-auto">
+// Awaiting input compilation...
+// Enter your objective and click "Compile System Instruction" to generate.
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-white/[0.04] flex items-center justify-between text-[10px] text-noir-500 font-mono">
+              <span id="tokenEstimate">0 tokens estimated</span>
+              <span>100% Deterministic</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Production Template Registry -->
+  <section class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <div class="tag-pill mb-4">
+        <span>CURATED NODES</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+        Production Template Registry
+      </h2>
+      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
+        Engineered templates for mission-critical software engineering and agent loops.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      
+      <!-- Node 1 -->
+      <div class="bento-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: SYS-ARCH-01</span>
+            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">VERIFIED</span>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Principal Systems Architect</h3>
+          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
+            Directs the LLM to write production-grade software following strict SOLID principles, handling edge cases, and eliminating placeholder code.
+          </p>
+          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
+You are an Elite Principal Software Architect. Your job is to analyze requirements and produce clean, modular, production-grade solutions. 
+Rules:
+1. Adhere strictly to SOLID principles.
+2. Provide complete implementations without '// TODO' placeholders.
+3. Structure code in explicit modular file boundaries.
+          </div>
+        </div>
+        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
+          <i class="fa-regular fa-copy text-xs"></i>
+          <span>Copy Node Instruction</span>
+        </button>
+      </div>
+
+      <!-- Node 2 -->
+      <div class="bento-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: AGENT-CYCLE-02</span>
+            <span class="text-[10px] font-mono text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20">AGENTIC</span>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Autonomous Reasoning Loop</h3>
+          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
+            Constructs an internal Observation-Thought-Action-Verification loop, allowing agents to self-correct before presenting answers.
+          </p>
+          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
+You are an Autonomous AI Agent. For every task, reason step-by-step:
+1. Decompose the goal into atomic sub-steps.
+2. Self-Correction: Challenge intermediate assumptions prior to output.
+3. Action: Emit executable commands or validated data.
+4. Verification: Assert final output matches target requirements.
+          </div>
+        </div>
+        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
+          <i class="fa-regular fa-copy text-xs"></i>
+          <span>Copy Node Instruction</span>
+        </button>
+      </div>
+
+      <!-- Node 3 -->
+      <div class="bento-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: STRICT-JSON-03</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">SCHEMA</span>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Deterministic JSON Synthesizer</h3>
+          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
+            Enforces zero conversational boilerplate, strictly stripping markdown ticks and delivering parseable payload output for APIs.
+          </p>
+          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
+You are a Deterministic API Data Synthesizer. 
+CRITICAL MANDATES:
+- Output MUST be valid, parseable JSON conforming to schema.
+- Do NOT wrap response in markdown blocks (no ```json).
+- Never include greetings, preambles, or conversational commentary.
+          </div>
+        </div>
+        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
+          <i class="fa-regular fa-copy text-xs"></i>
+          <span>Copy Node Instruction</span>
+        </button>
+      </div>
+
+      <!-- Node 4 -->
+      <div class="bento-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: DEBUG-RCA-04</span>
+            <span class="text-[10px] font-mono text-rose-400 bg-rose-400/10 px-2 py-0.5 rounded border border-rose-400/20">DEBUG</span>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Root Cause Analysis & Fix Specialist</h3>
+          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
+            Triages runtime tracebacks, isolated failing state conditions, and constructs unified git patch diffs with regression tests.
+          </p>
+          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
+You are a Principal Debugging Engineer. Analyze the stack trace or defect provided.
+Structure output strictly:
+1. Root Cause Analysis (RCA) at the runtime layer.
+2. Exact failing boundary condition.
+3. Complete drop-in code fix with unified diff format.
+4. Regression test asserting resolution.
+          </div>
+        </div>
+        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
+          <i class="fa-regular fa-copy text-xs"></i>
+          <span>Copy Node Instruction</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        Created with AI precision by <a href="https://github.com/gautamnox7-debug" target="_blank" class="text-slate-300 hover:text-indigo-400 font-semibold underline decoration-indigo-500/50">Gautam Mishra (@gautamnox7-debug)</a>
+  <footer class="border-t border-white/[0.06] py-14 bg-noir-950 text-xs text-noir-400">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center space-x-3">
+        <div class="w-6 h-6 rounded bg-white/[0.08] flex items-center justify-center text-white text-[10px]">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+        <span class="text-white font-medium">PromptForge AI</span>
+        <span class="text-noir-500">•</span>
+        <span>Engineered by <a href="https://github.com/gautamnox7-debug" target="_blank" class="text-white hover:underline">Gautam Mishra (@gautamnox7-debug)</a></span>
       </div>
-      <div class="flex items-center space-x-6">
-        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="hover:text-slate-300">GitHub Repository</a>
-        <a href="https://github.com/gautamnox7-debug/gemini-agent-flow" target="_blank" class="hover:text-slate-300">GeminiAgentFlow</a>
+
+      <div class="flex items-center space-x-6 font-mono text-[11px]">
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="hover:text-white transition">GitHub Repository</a>
+        <a href="https://github.com/gautamnox7-debug/gemini-agent-flow" target="_blank" class="hover:text-white transition">GeminiAgentFlow</a>
+        <a href="https://github.com/gautamnox7-debug" target="_blank" class="hover:text-white transition">Profile</a>
       </div>
     </div>
   </footer>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-indigo-600 text-white px-5 py-3 rounded-xl shadow-2xl font-medium text-sm flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300 translate-y-4 z-50">
-    <i class="fa-solid fa-circle-check"></i>
-    <span id="toastMsg">Copied to clipboard!</span>
+  <!-- Subtle Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-white text-black px-4 py-2.5 rounded-full shadow-2xl font-medium text-xs flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-200 translate-y-3 z-50">
+    <i class="fa-solid fa-check text-[10px]"></i>
+    <span id="toastMsg">Copied to clipboard</span>
   </div>
 
   <script>
-    function showToast(message) {
+    let activeModel = 'gemini';
+
+    function selectModel(model, btn) {
+      activeModel = model;
+      document.querySelectorAll('.model-btn').forEach(b => {
+        b.classList.remove('bg-white/[0.08]', 'border-white/[0.18]', 'text-white');
+        b.classList.add('bg-white/[0.03]', 'border-white/[0.06]', 'text-noir-400');
+      });
+      btn.classList.remove('bg-white/[0.03]', 'border-white/[0.06]', 'text-noir-400');
+      btn.classList.add('bg-white/[0.08]', 'border-white/[0.18]', 'text-white');
+    }
+
+    function showToast(text) {
       const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMsg');
-      toastMsg.innerText = message;
-      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      document.getElementById('toastMsg').innerText = text;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
       toast.classList.add('opacity-100', 'translate-y-0');
       setTimeout(() => {
-        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
         toast.classList.remove('opacity-100', 'translate-y-0');
-      }, 2500);
+      }, 2000);
     }
 
-    function copyText(button) {
-      const textContainer = button.parentElement.querySelector('.select-all');
-      const text = textContainer.innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('System prompt copied to clipboard!');
-      });
-    }
+    function generateEnginePrompt() {
+      const goal = document.getElementById('rawGoal').value.trim();
+      const codeBox = document.getElementById('compiledCode');
+      const tokenCounter = document.getElementById('tokenEstimate');
 
-    function copyEnhanced() {
-      const text = document.getElementById('enhancedOutput').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Optimized prompt copied!');
-      });
-    }
-
-    function enhancePrompt() {
-      const input = document.getElementById('rawPromptInput').value.trim();
-      const model = document.getElementById('modelTarget').value;
-      const outputBox = document.getElementById('enhancedOutput');
-
-      if (!input) {
-        outputBox.innerText = "Please enter your rough goal or task in the box on the left first!";
+      if (!goal) {
+        codeBox.innerText = "// Error: Please input an objective above before compiling.";
         return;
       }
 
-      const enhanced = `[SYSTEM INSTRUCTION: EXPERT ASSISTANT FOR ${model.toUpperCase()}]
+      const compiled = `[SYSTEM_INSTRUCTION: PROMPTFORGE_RUNTIME_${activeModel.toUpperCase()}]
 
-ROLE & PERSONA:
-You are an expert specialist focused on delivering high-precision results for the user's objective.
+ROLE:
+You are an Elite Technical Specialist operating with deterministic accuracy and zero conversational fluff.
 
-CORE OBJECTIVE:
-"${input}"
+MISSION GOAL:
+"${goal}"
 
-OPERATIONAL CONSTRAINTS:
-1. Provide production-grade, immediately actionable output.
-2. State any critical architectural trade-offs or prerequisite assumptions.
-3. Eliminate redundant pleasantries; ground every claim in verifiable facts.
-4. Structure the response with clear headings, concise rationale, and clean code blocks.
+OPERATIONAL GUARDRAILS:
+1. Provide production-ready, non-placeholder output.
+2. Adhere to modular software engineering patterns and complete type signatures.
+3. Explicitly state assumptions, complexity, and fail-safes.
+4. Output schema: 
+   - Strategy & Architecture
+   - Implementation Code
+   - Verification Assertions`;
 
-EXECUTION FORMAT:
-- Step 1: Technical Analysis & Strategy
-- Step 2: Implementation / Solution
-- Step 3: Verification & Edge-Case Checklist`;
-
-      outputBox.innerText = enhanced;
-      showToast('Prompt enhanced successfully!');
+      codeBox.innerText = compiled;
+      const wordCount = compiled.split(/\s+/).length;
+      tokenCounter.innerText = `~${Math.round(wordCount * 1.3)} tokens estimated`;
+      showToast('Compiled successfully');
     }
+
+    function copyGenerated() {
+      const text = document.getElementById('compiledCode').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Instruction copied');
+      });
+    }
+
+    function copySnippet(btn) {
+      const text = btn.parentElement.querySelector('.select-all').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Node instruction copied');
+      });
+    }
+
+    // Dynamic subtle mouse light effect for bento cards
+    document.querySelectorAll('.bento-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
   </script>
 </body>
 </html>
