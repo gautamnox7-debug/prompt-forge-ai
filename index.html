@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromptForge — Precision Prompt Engineering & Autonomous Agent Framework</title>
-  
-  <!-- Modern Typography: Inter & JetBrains Mono -->
+  <title>PROMPTFORGE — AI Architecture & Precision Prompt Engine</title>
+
+  <!-- Google Fonts: Space Grotesk (Futuristic Display) & Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -19,20 +19,19 @@
       theme: {
         extend: {
           fontFamily: {
+            display: ['"Space Grotesk"', 'sans-serif'],
             sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            noir: {
-              950: '#030304',
-              900: '#070709',
-              850: '#0c0d10',
-              800: '#121318',
-              700: '#1d1e26',
-              600: '#2a2b37',
-              400: '#717384',
-              300: '#9d9fae',
-              100: '#e4e5eb'
+            brand: {
+              magenta: '#f43f8e',
+              purple: '#9333ea',
+              violet: '#6366f1',
+              cyan: '#06b6d4',
+              dark: '#030108',
+              card: '#0a0614',
+              surface: '#110b22'
             }
           }
         }
@@ -42,648 +41,624 @@
 
   <style>
     body {
-      background-color: #030304;
-      color: #e4e5eb;
+      background-color: #030108;
+      color: #ede9fe;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.01em;
     }
 
-    /* Ambient Hero Mesh Background */
-    .hero-mesh {
-      background: 
-        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 50% -10%, rgba(120, 120, 140, 0.15) 0%, transparent 60%);
+    /* Watermark text outline like in reference image */
+    .outline-watermark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.06);
+      text-transform: uppercase;
+      user-select: none;
+      pointer-events: none;
     }
 
-    .ambient-grid {
-      background-size: 40px 40px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 70%, transparent 100%);
+    /* Ambient Violet/Pink Glow Spots */
+    .glow-magenta {
+      background: radial-gradient(circle, rgba(244, 63, 142, 0.22) 0%, rgba(147, 51, 234, 0.12) 40%, transparent 70%);
+      filter: blur(60px);
+    }
+    .glow-cyan {
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.1) 40%, transparent 70%);
+      filter: blur(50px);
     }
 
-    /* High-end Bento & Minimalist Card styling */
-    .bento-card {
-      background: #090a0d;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 18px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Dual-Pill Button with Connected Circle (Identical to reference image) */
+    .dual-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 4px 6px 4px 18px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .dual-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(244, 63, 142, 0.5);
+      box-shadow: 0 0 25px rgba(244, 63, 142, 0.3);
+      transform: translateY(-1px);
+    }
+    .dual-pill-btn .pill-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 9999px;
+      background: #ffffff;
+      color: #030108;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 12px;
+      transition: transform 0.3s ease;
+    }
+    .dual-pill-btn:hover .pill-circle {
+      transform: rotate(45deg);
+      background: #f43f8e;
+      color: #ffffff;
+    }
+
+    /* Luxe Dark Cards with Purple Ambient Glow */
+    .luxe-card {
+      background: linear-gradient(180deg, rgba(20, 12, 38, 0.7) 0%, rgba(10, 6, 20, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
     }
-    .bento-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.04), transparent 40%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .bento-card:hover {
-      border-color: rgba(255, 255, 255, 0.18);
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
-    }
-    .bento-card:hover::before {
-      opacity: 1;
+    .luxe-card:hover {
+      border-color: rgba(147, 51, 234, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(147, 51, 234, 0.25);
     }
 
-    /* Minimal Top Pills */
-    .tag-pill {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      color: #9d9fae;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    /* Process Row Hover Effect */
+    .process-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .process-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(244, 63, 142, 0.3);
+    }
+    .process-active {
+      background: linear-gradient(90deg, rgba(147, 51, 234, 0.25) 0%, rgba(244, 63, 142, 0.15) 50%, rgba(3, 1, 8, 0.8) 100%);
+      border-top: 1px solid rgba(244, 63, 142, 0.4);
+      border-bottom: 1px solid rgba(244, 63, 142, 0.4);
     }
 
-    /* Code highlights */
-    pre, code {
-      font-family: 'JetBrains Mono', monospace;
+    /* 3D Iridescent Liquid Ribbon Animation */
+    @keyframes floatRibbon {
+      0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+      50% { transform: translateY(-12px) rotate(2deg) scale(1.02); }
+    }
+    .animate-ribbon {
+      animation: floatRibbon 7s ease-in-out infinite;
     }
 
-    /* Custom subtle scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #050507;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1d1e26;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #2a2b37;
-    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #030108; }
+    ::-webkit-scrollbar-thumb { background: #2e1a53; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9333ea; }
   </style>
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-pink-500 selection:text-white">
 
-  <!-- Ambient Grid Background -->
-  <div class="fixed inset-0 ambient-grid pointer-events-none -z-10"></div>
+  <!-- Ambient Glow Orbs -->
+  <div class="fixed top-20 right-[-10%] w-[600px] h-[600px] glow-magenta rounded-full pointer-events-none -z-10"></div>
+  <div class="fixed top-[45%] left-[-15%] w-[700px] h-[700px] glow-cyan rounded-full pointer-events-none -z-10"></div>
+  <div class="fixed bottom-[10%] right-[-10%] w-[600px] h-[600px] glow-magenta rounded-full pointer-events-none -z-10"></div>
 
-  <!-- Navbar -->
-  <nav class="border-b border-white/[0.06] bg-noir-950/80 backdrop-blur-xl sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+  <!-- Top Navigation (Exact Match to Reference Image) -->
+  <nav class="border-b border-white/[0.06] bg-brand-dark/70 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-18 py-4 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-lg bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-white">
-          <i class="fa-solid fa-cube text-xs"></i>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 via-purple-600 to-indigo-500 p-[1.5px] flex items-center justify-center">
+          <div class="w-full h-full bg-brand-dark rounded-full flex items-center justify-center text-white text-xs">
+            <i class="fa-solid fa-atom"></i>
+          </div>
         </div>
-        <div class="flex items-center space-x-2">
-          <span class="text-sm font-semibold tracking-tight text-white">PromptForge</span>
-          <span class="text-[10px] text-noir-400 font-mono px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">v2.1</span>
-        </div>
+        <span class="font-display font-bold tracking-wider text-base text-white">PROMPT<span class="text-pink-400">FORGE</span></span>
       </div>
 
-      <div class="hidden md:flex items-center space-x-8 text-xs text-noir-400 font-medium">
-        <a href="#overview" class="hover:text-white transition">Overview</a>
-        <a href="#how-it-works" class="hover:text-white transition">How it Works</a>
-        <a href="#playground" class="hover:text-white transition">Playground</a>
-        <a href="#framework" class="hover:text-white transition">Architecture</a>
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center space-x-8 text-xs uppercase tracking-widest font-medium text-slate-300">
+        <a href="#about" class="hover:text-pink-400 transition">About</a>
+        <a href="#services" class="hover:text-pink-400 transition">Solutions</a>
+        <a href="#process" class="hover:text-pink-400 transition">Process</a>
+        <a href="#playground" class="hover:text-pink-400 transition">Playground</a>
       </div>
 
-      <div class="flex items-center space-x-3">
-        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="h-8 px-3.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-medium text-white flex items-center space-x-2 transition">
+      <!-- Right CTA Button -->
+      <div>
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="h-9 px-5 rounded-full border border-white/20 bg-white/[0.04] hover:bg-white/[0.1] text-xs font-semibold uppercase tracking-wider text-white transition flex items-center space-x-2">
           <i class="fa-brands fa-github text-sm"></i>
           <span>GitHub</span>
         </a>
       </div>
+
     </div>
   </nav>
 
-  <!-- Hero Section (Matches Reference Image Style) -->
-  <section class="relative pt-28 pb-20 text-center px-6 hero-mesh overflow-hidden">
-    <!-- Top Pill -->
-    <div class="inline-block mb-6">
-      <div class="tag-pill">
-        <span class="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse"></span>
-        Prompt Architecture Engine
-      </div>
-    </div>
+  <!-- Hero Section (Matches Reference Image Layout) -->
+  <section class="relative pt-20 pb-28 px-6 max-w-7xl mx-auto overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Column: Typography & CTAs -->
+      <div class="lg:col-span-7 z-10">
+        <p class="text-xs uppercase tracking-[0.25em] text-pink-400 font-semibold mb-3">WE ARE</p>
+        <h1 class="text-5xl sm:text-7xl font-display font-extrabold text-white tracking-tight leading-[1.05] uppercase">
+          PROMPT<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-300">FORGE</span>
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-lg mt-6 leading-relaxed font-light">
+          Architecting production prompt intelligence and autonomous agent protocols tailored to the unique needs of modern AI workflows.
+        </p>
 
-    <!-- Massive Minimalist Heading -->
-    <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.08]">
-      Modular Prompts Powered By AI Engine.
-    </h1>
-
-    <p class="text-noir-400 text-sm sm:text-base max-w-xl mx-auto mt-6 leading-relaxed font-normal">
-      Zero-hallucination. Agent-native. Guardrailed. Built to scale across LLM pipelines and autonomous workflows.
-    </p>
-
-    <!-- Main Pill Action Button -->
-    <div class="mt-8 flex justify-center">
-      <a href="#playground" class="h-11 px-7 rounded-full bg-white text-black font-semibold text-xs tracking-tight flex items-center space-x-2 hover:bg-white/90 transition shadow-[0_0_30px_rgba(255,255,255,0.25)]">
-        <span>Enter the Prompt Engine</span>
-        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-      </a>
-    </div>
-
-    <!-- Central Minimal Emblem (Like Reference Image) -->
-    <div class="mt-14 flex justify-center">
-      <div class="relative">
-        <div class="w-20 h-20 rounded-2xl bg-noir-900 border border-white/[0.12] flex items-center justify-center text-white shadow-2xl relative z-10">
-          <i class="fa-solid fa-microchip text-2xl text-white/90"></i>
+        <div class="mt-8 flex items-center space-x-4">
+          <a href="#playground" class="dual-pill-btn">
+            <span>Enter Studio</span>
+            <div class="pill-circle">
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </div>
+          </a>
         </div>
-        <!-- Subtle back glow -->
-        <div class="absolute inset-0 bg-white/10 blur-2xl rounded-full -z-10"></div>
-      </div>
-    </div>
 
-    <!-- Monochrome Partner / Supported Models Bar -->
-    <div class="mt-20 pt-10 border-t border-white/[0.04] max-w-5xl mx-auto">
-      <p class="text-[11px] uppercase tracking-widest text-noir-400 font-mono mb-7">Interoperable across leading models & providers</p>
-      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-14 text-noir-400 opacity-60">
-        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-brands fa-google text-sm"></i> <span>Google Gemini</span></div>
-        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-bolt text-sm"></i> <span>Anthropic Claude</span></div>
-        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-layer-group text-sm"></i> <span>OpenAI GPT-4o</span></div>
-        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-brands fa-github text-sm"></i> <span>GitHub Copilot</span></div>
-        <div class="flex items-center space-x-2 text-xs font-medium tracking-wider"><i class="fa-solid fa-cube text-sm"></i> <span>Antigravity</span></div>
+        <!-- Coordinates / Sub-info -->
+        <div class="mt-14 flex items-center space-x-6 text-[10px] font-mono tracking-widest text-slate-500 uppercase">
+          <span>LAT 28.6139° N</span>
+          <span>•</span>
+          <span>AI PROTOCOL V2.4</span>
+          <span>•</span>
+          <span>AUTONOMOUS</span>
+        </div>
       </div>
+
+      <!-- Right Column: 3D Iridescent Liquid Ribbon Graphic (Exact Match to Reference) -->
+      <div class="lg:col-span-5 relative flex justify-center items-center">
+        <!-- Glowing liquid ribbon SVG render -->
+        <div class="w-[340px] sm:w-[420px] h-[340px] sm:h-[420px] relative animate-ribbon">
+          <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full filter drop-shadow-[0_0_50px_rgba(244,63,142,0.45)]">
+            <defs>
+              <linearGradient id="liquidGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="35%" stop-color="#9333ea" />
+                <stop offset="70%" stop-color="#f43f8e" />
+                <stop offset="100%" stop-color="#ec4899" />
+              </linearGradient>
+              <linearGradient id="liquidGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="40%" stop-color="#6366f1" />
+                <stop offset="80%" stop-color="#f43f5e" />
+              </linearGradient>
+            </defs>
+            <!-- 3D Ribbon Curves with Iridescent Chrome reflections -->
+            <path d="M 70,220 C 30,120 120,40 220,60 C 320,80 370,180 320,270 C 270,360 170,340 120,290 C 80,250 140,190 200,180 C 260,170 300,230 250,280 C 200,320 140,290 120,230" 
+                  stroke="url(#liquidGrad1)" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 85,210 C 50,130 130,60 210,75 C 290,90 340,180 300,255 C 250,330 160,320 130,270" 
+                  stroke="url(#liquidGrad2)" stroke-width="20" stroke-linecap="round" opacity="0.8" />
+            <path d="M 95,200 C 70,140 140,80 200,90 C 270,100 310,180 280,240" 
+                  stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+          </svg>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Section 1: What is PromptForge? (Reference 3-Card Row) -->
-  <section id="overview" class="py-24 max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <div class="tag-pill mb-4">
-        <span>Introduction</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-        What is PromptForge ?
-      </h2>
-      <p class="text-noir-400 text-xs sm:text-sm max-w-xl mx-auto mt-3">
-        A production-grade prompt compute protocol built for deterministic output — bridging raw thoughts into verified, zero-hallucination agent instructions.
-      </p>
+  <!-- Section 2: About (Matches Reference Image with Giant Watermark) -->
+  <section id="about" class="relative py-28 px-6 max-w-7xl mx-auto border-t border-white/[0.06]">
+    
+    <!-- Giant Background Watermark "ABOUT" -->
+    <div class="absolute right-0 top-12 text-7xl sm:text-9xl outline-watermark opacity-40">
+      ABOUT
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <!-- Card 1 -->
-      <div class="bento-card p-6 flex items-start space-x-4">
-        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
-          <i class="fa-solid fa-server text-sm"></i>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      
+      <!-- Left: Big Chromatic Fluid Ribbon (Matches Reference Image) -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="w-[300px] sm:w-[380px] h-[360px] animate-ribbon">
+          <svg viewBox="0 0 350 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full filter drop-shadow-[0_0_40px_rgba(147,51,234,0.5)]">
+            <path d="M 120,40 C 220,20 310,90 280,190 C 250,290 130,360 70,300 C 10,240 40,140 120,110 C 200,80 240,180 180,240 C 140,280 80,240 90,180" 
+                  stroke="url(#liquidGrad1)" stroke-width="52" stroke-linecap="round" />
+            <path d="M 130,55 C 210,40 280,100 260,180 C 230,260 130,320 85,280" 
+                  stroke="url(#liquidGrad2)" stroke-width="18" stroke-linecap="round" opacity="0.85" />
+            <path d="M 135,65 C 190,55 250,110 230,170" 
+                  stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.5" />
+          </svg>
         </div>
+      </div>
+
+      <!-- Right: Content -->
+      <div class="lg:col-span-7">
+        <p class="text-xs uppercase tracking-[0.25em] text-pink-400 font-semibold mb-3">WHO WE ARE</p>
+        <h2 class="text-2xl sm:text-4xl font-display font-bold text-white tracking-tight leading-snug">
+          Providing compact, modern intelligence management consulting services tailored to the unique needs of our clients.
+        </h2>
+        <p class="text-slate-400 text-sm mt-5 leading-relaxed font-light">
+          PromptForge acts as an autonomous prompt compiler and reasoning protocol, transforming fuzzy human expectations into razor-sharp, zero-hallucination agent instructions. Founded by Gautam Mishra to unlock rapid software engineering.
+        </p>
+
+        <div class="mt-8">
+          <a href="#services" class="dual-pill-btn">
+            <span>Explore Solutions</span>
+            <div class="pill-circle">
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 3: Solutions / Services (Reference 4-Card Dark Glass Row) -->
+  <section id="services" class="relative py-28 px-6 max-w-7xl mx-auto border-t border-white/[0.06]">
+    
+    <!-- Giant Background Watermark "SERVICES" -->
+    <div class="absolute right-0 top-12 text-7xl sm:text-9xl outline-watermark opacity-40">
+      SERVICES
+    </div>
+
+    <div class="relative z-10 mb-14">
+      <p class="text-xs uppercase tracking-[0.25em] text-pink-400 font-semibold mb-2">WHAT WE DO</p>
+      <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
+        Elevate Your AI Capabilities With <br class="hidden sm:inline"/>Tailored Prompt Architectures
+      </h2>
+    </div>
+
+    <!-- 4 Sleek Dark Purple Glass Cards (Exact Match to Reference Image) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+      
+      <!-- Card 1 -->
+      <div class="luxe-card p-6 flex flex-col justify-between h-[360px]">
         <div>
-          <h3 class="text-sm font-semibold text-white mb-1">Production System Templates</h3>
-          <p class="text-xs text-noir-400 leading-relaxed">
-            Curated, benchmarked system instructions with strict structural guardrails.
+          <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-6">
+            <i class="fa-solid fa-cubes text-sm"></i>
+          </div>
+          <h3 class="text-base font-display font-bold text-white mb-2">Systems Architecture</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Transforms high-level business goals into scalable software scaffolds adhering to SOLID and enterprise clean code patterns.
           </p>
         </div>
+        <button onclick="loadTemplate('arch')" class="dual-pill-btn w-fit">
+          <span>Inspect Node</span>
+          <div class="pill-circle"><i class="fa-solid fa-arrow-right text-[9px]"></i></div>
+        </button>
       </div>
 
       <!-- Card 2 -->
-      <div class="bento-card p-6 flex items-start space-x-4">
-        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
-          <i class="fa-solid fa-gear text-sm"></i>
-        </div>
+      <div class="luxe-card p-6 flex flex-col justify-between h-[360px]">
         <div>
-          <h3 class="text-sm font-semibold text-white mb-1">Real-Time Prompt Optimization</h3>
-          <p class="text-xs text-noir-400 leading-relaxed">
-            Converts vague instructions into step-by-step reasoning sequences automatically.
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-6">
+            <i class="fa-solid fa-arrows-spin text-sm"></i>
+          </div>
+          <h3 class="text-base font-display font-bold text-white mb-2">Autonomous Agent Loops</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Observation-Thought-Action-Verification reasoning cycles designed to prevent loops and guarantee verifiable task outcomes.
           </p>
         </div>
+        <button onclick="loadTemplate('agent')" class="dual-pill-btn w-fit">
+          <span>Inspect Node</span>
+          <div class="pill-circle"><i class="fa-solid fa-arrow-right text-[9px]"></i></div>
+        </button>
       </div>
 
       <!-- Card 3 -->
-      <div class="bento-card p-6 flex items-start space-x-4">
-        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-white/80">
-          <i class="fa-solid fa-shield-halved text-sm"></i>
-        </div>
+      <div class="luxe-card p-6 flex flex-col justify-between h-[360px]">
         <div>
-          <h3 class="text-sm font-semibold text-white mb-1">Zero-Hallucination Guardrails</h3>
-          <p class="text-xs text-noir-400 leading-relaxed">
-            Eliminates conversational filler and ensures 100% valid schema extraction.
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6">
+            <i class="fa-solid fa-code text-sm"></i>
+          </div>
+          <h3 class="text-base font-display font-bold text-white mb-2">Deterministic Schemas</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Strips all chat conversational padding to enforce 100% valid, typed JSON payloads for programmatic API pipelines.
           </p>
         </div>
+        <button onclick="loadTemplate('json')" class="dual-pill-btn w-fit">
+          <span>Inspect Node</span>
+          <div class="pill-circle"><i class="fa-solid fa-arrow-right text-[9px]"></i></div>
+        </button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="luxe-card p-6 flex flex-col justify-between h-[360px]">
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-6">
+            <i class="fa-solid fa-bug text-sm"></i>
+          </div>
+          <h3 class="text-base font-display font-bold text-white mb-2">Root Cause Bug Triage</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Deconstructs complex runtime stack traces, identifies failing boundaries, and outputs clean unified git diff patches.
+          </p>
+        </div>
+        <button onclick="loadTemplate('debug')" class="dual-pill-btn w-fit">
+          <span>Inspect Node</span>
+          <div class="pill-circle"><i class="fa-solid fa-arrow-right text-[9px]"></i></div>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 4: Consulting Process (A-01, B-02, C-03, D-04 - Exact Match to Reference) -->
+  <section id="process" class="py-28 px-6 max-w-7xl mx-auto border-t border-white/[0.06]">
+    <div class="mb-14">
+      <p class="text-xs uppercase tracking-[0.25em] text-pink-400 font-semibold mb-2">HOW IT WORKS</p>
+      <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
+        Our Prompt Engineering Process
+      </h2>
+    </div>
+
+    <!-- Process Rows -->
+    <div class="space-y-0">
+      
+      <!-- Row 1: A-01 -->
+      <div class="process-row py-8 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="flex items-center space-x-6">
+          <span class="text-xs font-mono text-slate-500">01</span>
+          <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">A-01</span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-pink-400 font-mono">OBJECTIVE DECOMPOSITION</div>
+        <p class="text-xs text-slate-400 max-w-md font-light leading-relaxed">
+          Initial analysis of requirements, determining token boundaries, input modalities, and required system personas.
+        </p>
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60">
+          <i class="fa-solid fa-arrow-right text-xs -rotate-45"></i>
+        </div>
+      </div>
+
+      <!-- Row 2: B-02 (Highlighted Purple Card with Fluid Graphic - Exact Match) -->
+      <div class="process-active py-8 px-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 my-2 shadow-2xl relative overflow-hidden">
+        <div class="flex items-center space-x-6 z-10">
+          <span class="text-xs font-mono text-white/80">02</span>
+          <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">B-02</span>
+        </div>
+        
+        <!-- Embedded Mini Iridescent Fluid Graphic inside the active row -->
+        <div class="w-24 h-14 relative z-10 hidden lg:block">
+          <svg viewBox="0 0 160 80" fill="none" class="w-full h-full">
+            <path d="M 20,40 C 50,10 90,70 140,40" stroke="url(#liquidGrad1)" stroke-width="24" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <div class="text-xs uppercase tracking-widest text-white font-mono z-10 font-semibold">GUARDRAIL & SYNTAX INJECTION</div>
+        <p class="text-xs text-slate-200 max-w-md font-light leading-relaxed z-10">
+          Injecting deterministic instructions, anti-hallucination barriers, and explicit input-output interfaces.
+        </p>
+        <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-bold z-10">
+          <i class="fa-solid fa-arrow-right text-xs -rotate-45"></i>
+        </div>
+      </div>
+
+      <!-- Row 3: C-03 -->
+      <div class="process-row py-8 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="flex items-center space-x-6">
+          <span class="text-xs font-mono text-slate-500">03</span>
+          <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">C-03</span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-pink-400 font-mono">AUTONOMOUS VERIFICATION</div>
+        <p class="text-xs text-slate-400 max-w-md font-light leading-relaxed">
+          Running simulated prompt benchmarks across Gemini 2.5, Claude 3.5, and GPT-4o to verify response consistency.
+        </p>
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60">
+          <i class="fa-solid fa-arrow-right text-xs -rotate-45"></i>
+        </div>
+      </div>
+
+      <!-- Row 4: D-04 -->
+      <div class="process-row py-8 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="flex items-center space-x-6">
+          <span class="text-xs font-mono text-slate-500">04</span>
+          <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">D-04</span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-pink-400 font-mono">PRODUCTION DEPLOYMENT</div>
+        <p class="text-xs text-slate-400 max-w-md font-light leading-relaxed">
+          Exporting certified system instructions directly to API keys, agent frameworks, or open-source repositories.
+        </p>
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60">
+          <i class="fa-solid fa-arrow-right text-xs -rotate-45"></i>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Big Statement Banner (Exact Match to Reference Image) -->
+  <section class="py-20 overflow-hidden relative border-t border-b border-white/[0.06] bg-brand-card/50">
+    <div class="whitespace-nowrap flex items-center">
+      <div class="text-5xl sm:text-8xl font-display font-extrabold text-white tracking-tight uppercase px-4 opacity-90">
+        WHERE STRATEGIES TRANSFORM INTO CODE • WHERE STRATEGIES TRANSFORM INTO CODE
       </div>
     </div>
   </section>
 
-  <!-- Section 2: How It Works (Reference 4-Column Tall Cards) -->
-  <section id="how-it-works" class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <div class="tag-pill mb-4">
-        <span>CHOOSE • DEPLOY • COMMAND • ITERATE</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-        How it Works
-      </h2>
-      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
-        Select a verified prompt node, tune operational constraints, and deploy directly to API loops.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Card 1: Choose Node -->
-      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
-        <div>
-          <span class="text-[10px] font-mono text-noir-400 block mb-3">01 / NODE SELECTION</span>
-          <h3 class="text-sm font-semibold text-white mb-1.5">Choose Persona</h3>
-          <p class="text-xs text-noir-400">Select an architecture node from the registry or bring your custom logic.</p>
-        </div>
-        
-        <!-- Minimal Dark Card Graphic -->
-        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center items-center relative overflow-hidden">
-          <div class="w-14 h-14 rounded-full bg-noir-900 border border-white/[0.1] flex items-center justify-center text-white/70 shadow-inner">
-            <i class="fa-solid fa-code-branch text-sm"></i>
-          </div>
-          <span class="text-[10px] text-noir-400 font-mono mt-3">ARCH-PROMPT-01</span>
+  <!-- Section 5: Interactive Studio & Generator (Matches Reference Image Form & Fluid) -->
+  <section id="playground" class="py-28 px-6 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left: Fluid Chromatic Ribbon Graphic -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="w-[320px] sm:w-[400px] h-[400px] animate-ribbon">
+          <svg viewBox="0 0 400 400" fill="none" class="w-full h-full filter drop-shadow-[0_0_50px_rgba(236,72,153,0.5)]">
+            <path d="M 100,200 C 50,100 150,30 250,70 C 350,110 370,240 300,310 C 230,380 120,350 80,280 C 50,220 120,150 200,160 C 280,170 300,260 230,290" 
+                  stroke="url(#liquidGrad1)" stroke-width="46" stroke-linecap="round" />
+            <path d="M 120,190 C 80,110 160,50 240,85 C 320,120 340,230 280,290" 
+                  stroke="url(#liquidGrad2)" stroke-width="16" stroke-linecap="round" opacity="0.8" />
+          </svg>
         </div>
       </div>
 
-      <!-- Card 2: Deploy to Core -->
-      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
-        <div>
-          <span class="text-[10px] font-mono text-noir-400 block mb-3">02 / CONFIGURATION</span>
-          <h3 class="text-sm font-semibold text-white mb-1.5">Configure Constraints</h3>
-          <p class="text-xs text-noir-400">Set deterministic parameters, token budgets, and output schemas.</p>
-        </div>
-        
-        <!-- Minimal Dark Card Graphic -->
-        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center space-y-2 font-mono text-[10px]">
-          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
-            <span>temp: 0.1</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          </div>
-          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
-            <span>format: "raw_json"</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-          </div>
-          <div class="h-6 px-2.5 rounded bg-white/[0.04] border border-white/[0.06] flex items-center justify-between text-noir-300">
-            <span>guardrails: true</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-white/70"></span>
-          </div>
-        </div>
-      </div>
+      <!-- Right: Interactive Developer Form (Matches Reference Input Card) -->
+      <div class="lg:col-span-7">
+        <div class="luxe-card p-8 sm:p-10 border border-white/10 shadow-2xl">
+          <p class="text-xs uppercase tracking-[0.25em] text-pink-400 font-semibold mb-2">STUDIO COMPILER</p>
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mb-6">
+            Generate Precision System Prompt
+          </h2>
 
-      <!-- Card 3: Register + Publish -->
-      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
-        <div>
-          <span class="text-[10px] font-mono text-noir-400 block mb-3">03 / VERIFICATION</span>
-          <h3 class="text-sm font-semibold text-white mb-1.5">Autonomous Loop</h3>
-          <p class="text-xs text-noir-400">Verify reasoning chains before committing to production inference.</p>
-        </div>
-        
-        <!-- Minimal Dark Card Graphic -->
-        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 flex flex-col justify-center items-center">
-          <div class="w-16 h-16 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center justify-center text-noir-300">
-            <i class="fa-solid fa-arrows-rotate text-lg"></i>
-          </div>
-          <div class="w-full mt-3 h-7 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-between px-2 text-[10px] text-noir-400">
-            <span>Give any command...</span>
-            <i class="fa-solid fa-arrow-up text-[9px] text-white"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Playground Mode -->
-      <div class="bento-card p-5 flex flex-col justify-between h-[360px]">
-        <div>
-          <span class="text-[10px] font-mono text-noir-400 block mb-3">04 / INTEGRATION</span>
-          <h3 class="text-sm font-semibold text-white mb-1.5">Playground Mode</h3>
-          <p class="text-xs text-noir-400">Simulate, refine, and iterate agent behaviors in a safe runtime environment.</p>
-        </div>
-        
-        <!-- Minimal Dark Card Graphic (Code snippet window) -->
-        <div class="w-full h-40 rounded-xl bg-noir-950 border border-white/[0.05] p-3 font-mono text-[9px] text-noir-400 overflow-hidden leading-tight flex flex-col justify-between">
-          <div class="flex items-center space-x-1.5 text-noir-600 border-b border-white/[0.04] pb-2 mb-1">
-            <span class="w-2 h-2 rounded-full bg-white/20"></span>
-            <span class="w-2 h-2 rounded-full bg-white/20"></span>
-            <span class="w-2 h-2 rounded-full bg-white/20"></span>
-          </div>
-          <pre class="text-noir-300"><code>{
-  "agent": "Autonomous",
-  "status": "Ready",
-  "auth": "PROMPT_TOKEN"
-}</code></pre>
-          <span class="text-emerald-400">✓ 0.04ms runtime</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 3: Interactive Developer Playground (The Core Working Engine) -->
-  <section id="playground" class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <div class="tag-pill mb-4">
-        <span>DEVELOPER CONSOLE</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-        Precision Prompt Generator
-      </h2>
-      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
-        Input raw intentions below. The engine converts them into production system instructions.
-      </p>
-    </div>
-
-    <!-- Playground Bento Console -->
-    <div class="bento-card p-6 md:p-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- Left: Input & Controls (5 Cols) -->
-        <div class="lg:col-span-5 flex flex-col justify-between space-y-5">
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <label class="text-[11px] uppercase tracking-wider font-mono text-noir-400">Task Objective</label>
-              <span class="text-[10px] text-noir-500 font-mono">Raw Input</span>
-            </div>
-            <textarea id="rawGoal" rows="6" class="w-full bg-noir-950 border border-white/[0.08] focus:border-white/30 rounded-xl p-4 text-xs font-mono text-white placeholder-noir-500 focus:outline-none transition resize-none leading-relaxed" placeholder="e.g. Build an autonomous web crawler that scrapes tech blogs, extracts key insights in JSON, and filters out clickbait..."></textarea>
-          </div>
-
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-mono text-noir-400 uppercase tracking-wider">Target Model Architecture</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <button onclick="selectModel('gemini', this)" class="model-btn h-9 rounded-lg bg-white/[0.08] border border-white/[0.18] text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
-                <i class="fa-brands fa-google text-[10px]"></i>
-                <span>Gemini</span>
-              </button>
-              <button onclick="selectModel('claude', this)" class="model-btn h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] text-noir-400 hover:text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
-                <i class="fa-solid fa-bolt text-[10px]"></i>
-                <span>Claude</span>
-              </button>
-              <button onclick="selectModel('gpt4o', this)" class="model-btn h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] text-noir-400 hover:text-white text-xs font-medium transition flex items-center justify-center space-x-1.5">
-                <i class="fa-solid fa-layer-group text-[10px]"></i>
-                <span>GPT-4o</span>
-              </button>
-            </div>
-          </div>
-
-          <button onclick="generateEnginePrompt()" class="w-full h-11 rounded-xl bg-white text-black font-semibold text-xs tracking-tight hover:bg-white/90 transition flex items-center justify-center space-x-2 shadow-lg shadow-white/10">
-            <i class="fa-solid fa-microchip text-xs"></i>
-            <span>Compile System Instruction</span>
-          </button>
-        </div>
-
-        <!-- Right: Compiled Output Terminal (7 Cols) -->
-        <div class="lg:col-span-7 flex flex-col justify-between">
-          <div class="bg-noir-950 border border-white/[0.08] rounded-xl p-5 h-full min-h-[340px] flex flex-col justify-between">
+          <div class="space-y-4">
             <div>
-              <div class="flex items-center justify-between border-b border-white/[0.06] pb-3 mb-4">
-                <div class="flex items-center space-x-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
-                  <span class="text-xs font-mono text-noir-300">compiled_instruction.txt</span>
-                </div>
-                <button onclick="copyGenerated()" id="copyBtn" class="text-xs font-mono text-noir-400 hover:text-white flex items-center space-x-1.5 transition">
+              <label class="text-[11px] uppercase tracking-wider font-mono text-slate-400 block mb-2">Target Architecture</label>
+              <select id="targetModel" class="w-full bg-brand-surface border border-white/10 rounded-xl px-4 py-3 text-xs font-mono text-white focus:outline-none focus:border-pink-500">
+                <option value="gemini">Google Gemini 2.5 (Pro / Flash)</option>
+                <option value="claude">Anthropic Claude 3.5 Sonnet</option>
+                <option value="gpt4">OpenAI GPT-4o / Reasoning</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-[11px] uppercase tracking-wider font-mono text-slate-400 block mb-2">System Objective / Requirements</label>
+              <textarea id="promptObjective" rows="4" class="w-full bg-brand-surface border border-white/10 rounded-xl p-4 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 resize-none" placeholder="e.g. Architect an autonomous data-scraping pipeline with retry mechanisms and strict JSON output..."></textarea>
+            </div>
+
+            <div class="pt-2">
+              <button onclick="compilePrompt()" class="dual-pill-btn w-full justify-between">
+                <span>Compile System Instruction</span>
+                <div class="pill-circle"><i class="fa-solid fa-microchip text-[10px]"></i></div>
+              </button>
+            </div>
+
+            <!-- Output Box -->
+            <div class="mt-6 pt-4 border-t border-white/10">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-mono text-slate-400 uppercase tracking-widest">Compiled Output</span>
+                <button onclick="copyOutput()" class="text-xs text-pink-400 hover:text-pink-300 font-mono flex items-center space-x-1">
                   <i class="fa-regular fa-copy"></i>
-                  <span>Copy</span>
+                  <span>Copy Payload</span>
                 </button>
               </div>
-
-              <div id="compiledCode" class="font-mono text-xs text-noir-300 whitespace-pre-wrap select-all leading-relaxed h-[270px] overflow-y-auto">
-// Awaiting input compilation...
-// Enter your objective and click "Compile System Instruction" to generate.
+              <div id="outputConsole" class="w-full h-44 bg-brand-dark/90 border border-white/10 rounded-xl p-4 font-mono text-xs text-slate-300 overflow-y-auto whitespace-pre-wrap select-all leading-relaxed">
+// Click "Compile System Instruction" to generate certified production instruction...
               </div>
             </div>
 
-            <div class="pt-3 border-t border-white/[0.04] flex items-center justify-between text-[10px] text-noir-500 font-mono">
-              <span id="tokenEstimate">0 tokens estimated</span>
-              <span>100% Deterministic</span>
-            </div>
           </div>
         </div>
-
       </div>
+
     </div>
   </section>
 
-  <!-- Section 4: Production Template Registry -->
-  <section class="py-24 border-t border-white/[0.05] max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <div class="tag-pill mb-4">
-        <span>CURATED NODES</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-        Production Template Registry
-      </h2>
-      <p class="text-noir-400 text-xs sm:text-sm max-w-lg mx-auto mt-3">
-        Engineered templates for mission-critical software engineering and agent loops.
-      </p>
-    </div>
+  <!-- Big Outlined Running Text Before Footer (Exact Match to Reference) -->
+  <div class="py-10 overflow-hidden text-center select-none pointer-events-none">
+    <h2 class="text-5xl sm:text-8xl font-display font-extrabold text-white tracking-tight uppercase opacity-90">
+      Transform Into Success
+    </h2>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <!-- Footer (Exact Match to Reference Image) -->
+  <footer class="border-t border-white/[0.06] py-12 bg-brand-dark text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
       
-      <!-- Node 1 -->
-      <div class="bento-card p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: SYS-ARCH-01</span>
-            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">VERIFIED</span>
-          </div>
-          <h3 class="text-base font-semibold text-white mb-2">Principal Systems Architect</h3>
-          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
-            Directs the LLM to write production-grade software following strict SOLID principles, handling edge cases, and eliminating placeholder code.
-          </p>
-          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
-You are an Elite Principal Software Architect. Your job is to analyze requirements and produce clean, modular, production-grade solutions. 
-Rules:
-1. Adhere strictly to SOLID principles.
-2. Provide complete implementations without '// TODO' placeholders.
-3. Structure code in explicit modular file boundaries.
-          </div>
-        </div>
-        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
-          <i class="fa-regular fa-copy text-xs"></i>
-          <span>Copy Node Instruction</span>
-        </button>
-      </div>
-
-      <!-- Node 2 -->
-      <div class="bento-card p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: AGENT-CYCLE-02</span>
-            <span class="text-[10px] font-mono text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20">AGENTIC</span>
-          </div>
-          <h3 class="text-base font-semibold text-white mb-2">Autonomous Reasoning Loop</h3>
-          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
-            Constructs an internal Observation-Thought-Action-Verification loop, allowing agents to self-correct before presenting answers.
-          </p>
-          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
-You are an Autonomous AI Agent. For every task, reason step-by-step:
-1. Decompose the goal into atomic sub-steps.
-2. Self-Correction: Challenge intermediate assumptions prior to output.
-3. Action: Emit executable commands or validated data.
-4. Verification: Assert final output matches target requirements.
-          </div>
-        </div>
-        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
-          <i class="fa-regular fa-copy text-xs"></i>
-          <span>Copy Node Instruction</span>
-        </button>
-      </div>
-
-      <!-- Node 3 -->
-      <div class="bento-card p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: STRICT-JSON-03</span>
-            <span class="text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">SCHEMA</span>
-          </div>
-          <h3 class="text-base font-semibold text-white mb-2">Deterministic JSON Synthesizer</h3>
-          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
-            Enforces zero conversational boilerplate, strictly stripping markdown ticks and delivering parseable payload output for APIs.
-          </p>
-          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
-You are a Deterministic API Data Synthesizer. 
-CRITICAL MANDATES:
-- Output MUST be valid, parseable JSON conforming to schema.
-- Do NOT wrap response in markdown blocks (no ```json).
-- Never include greetings, preambles, or conversational commentary.
-          </div>
-        </div>
-        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
-          <i class="fa-regular fa-copy text-xs"></i>
-          <span>Copy Node Instruction</span>
-        </button>
-      </div>
-
-      <!-- Node 4 -->
-      <div class="bento-card p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-noir-400 uppercase tracking-widest">NODE: DEBUG-RCA-04</span>
-            <span class="text-[10px] font-mono text-rose-400 bg-rose-400/10 px-2 py-0.5 rounded border border-rose-400/20">DEBUG</span>
-          </div>
-          <h3 class="text-base font-semibold text-white mb-2">Root Cause Analysis & Fix Specialist</h3>
-          <p class="text-xs text-noir-400 mb-4 leading-relaxed">
-            Triages runtime tracebacks, isolated failing state conditions, and constructs unified git patch diffs with regression tests.
-          </p>
-          <div class="bg-noir-950 border border-white/[0.06] rounded-xl p-4 font-mono text-xs text-noir-300 h-28 overflow-y-auto select-all leading-relaxed">
-You are a Principal Debugging Engineer. Analyze the stack trace or defect provided.
-Structure output strictly:
-1. Root Cause Analysis (RCA) at the runtime layer.
-2. Exact failing boundary condition.
-3. Complete drop-in code fix with unified diff format.
-4. Regression test asserting resolution.
-          </div>
-        </div>
-        <button onclick="copySnippet(this)" class="mt-4 w-full h-9 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-white transition flex items-center justify-center space-x-2">
-          <i class="fa-regular fa-copy text-xs"></i>
-          <span>Copy Node Instruction</span>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-white/[0.06] py-14 bg-noir-950 text-xs text-noir-400">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
       <div class="flex items-center space-x-3">
-        <div class="w-6 h-6 rounded bg-white/[0.08] flex items-center justify-center text-white text-[10px]">
-          <i class="fa-solid fa-cube"></i>
+        <div class="w-6 h-6 rounded-full bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 text-[10px]">
+          <i class="fa-solid fa-atom"></i>
         </div>
-        <span class="text-white font-medium">PromptForge AI</span>
-        <span class="text-noir-500">•</span>
+        <span class="font-display font-bold text-white tracking-wider">PROMPTFORGE</span>
+        <span class="text-slate-600">•</span>
         <span>Engineered by <a href="https://github.com/gautamnox7-debug" target="_blank" class="text-white hover:underline">Gautam Mishra (@gautamnox7-debug)</a></span>
       </div>
 
-      <div class="flex items-center space-x-6 font-mono text-[11px]">
-        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="hover:text-white transition">GitHub Repository</a>
-        <a href="https://github.com/gautamnox7-debug/gemini-agent-flow" target="_blank" class="hover:text-white transition">GeminiAgentFlow</a>
-        <a href="https://github.com/gautamnox7-debug" target="_blank" class="hover:text-white transition">Profile</a>
+      <div class="flex items-center space-x-6 uppercase tracking-wider text-[11px] font-mono">
+        <a href="https://github.com/gautamnox7-debug/prompt-forge-ai" target="_blank" class="hover:text-pink-400 transition">Repository</a>
+        <a href="https://github.com/gautamnox7-debug/gemini-agent-flow" target="_blank" class="hover:text-pink-400 transition">GeminiAgentFlow</a>
+        <a href="https://github.com/gautamnox7-debug" target="_blank" class="hover:text-pink-400 transition">Profile</a>
       </div>
+
+    </div>
+    <div class="text-center text-[10px] text-slate-600 mt-6 font-mono">
+      © 2026 Gautam Mishra. All rights reserved. Open-source under MIT.
     </div>
   </footer>
 
-  <!-- Subtle Toast -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-white text-black px-4 py-2.5 rounded-full shadow-2xl font-medium text-xs flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-200 translate-y-3 z-50">
-    <i class="fa-solid fa-check text-[10px]"></i>
-    <span id="toastMsg">Copied to clipboard</span>
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-pink-600 text-white px-5 py-3 rounded-full shadow-2xl font-medium text-xs flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300 translate-y-3 z-50">
+    <i class="fa-solid fa-check"></i>
+    <span id="toastMsg">Copied to clipboard!</span>
   </div>
 
   <script>
-    let activeModel = 'gemini';
-
-    function selectModel(model, btn) {
-      activeModel = model;
-      document.querySelectorAll('.model-btn').forEach(b => {
-        b.classList.remove('bg-white/[0.08]', 'border-white/[0.18]', 'text-white');
-        b.classList.add('bg-white/[0.03]', 'border-white/[0.06]', 'text-noir-400');
-      });
-      btn.classList.remove('bg-white/[0.03]', 'border-white/[0.06]', 'text-noir-400');
-      btn.classList.add('bg-white/[0.08]', 'border-white/[0.18]', 'text-white');
-    }
-
-    function showToast(text) {
+    function showToast(msg) {
       const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').innerText = text;
+      document.getElementById('toastMsg').innerText = msg;
       toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
       toast.classList.add('opacity-100', 'translate-y-0');
       setTimeout(() => {
         toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
         toast.classList.remove('opacity-100', 'translate-y-0');
-      }, 2000);
+      }, 2200);
     }
 
-    function generateEnginePrompt() {
-      const goal = document.getElementById('rawGoal').value.trim();
-      const codeBox = document.getElementById('compiledCode');
-      const tokenCounter = document.getElementById('tokenEstimate');
+    function compilePrompt() {
+      const objective = document.getElementById('promptObjective').value.trim();
+      const model = document.getElementById('targetModel').value.toUpperCase();
+      const consoleBox = document.getElementById('outputConsole');
 
-      if (!goal) {
-        codeBox.innerText = "// Error: Please input an objective above before compiling.";
+      if (!objective) {
+        consoleBox.innerText = "// Error: Please input your system objective above before compiling.";
         return;
       }
 
-      const compiled = `[SYSTEM_INSTRUCTION: PROMPTFORGE_RUNTIME_${activeModel.toUpperCase()}]
+      const template = `[PROMPTFORGE :: PRODUCTION SYSTEM PROTOCOL :: ${model}]
 
-ROLE:
-You are an Elite Technical Specialist operating with deterministic accuracy and zero conversational fluff.
+1. CORE PERSONA:
+You are an Elite Principal Specialist operating with zero conversational fluff and mathematical determinism.
 
-MISSION GOAL:
-"${goal}"
+2. MISSION OBJECTIVE:
+"${objective}"
 
-OPERATIONAL GUARDRAILS:
-1. Provide production-ready, non-placeholder output.
-2. Adhere to modular software engineering patterns and complete type signatures.
-3. Explicitly state assumptions, complexity, and fail-safes.
-4. Output schema: 
-   - Strategy & Architecture
-   - Implementation Code
-   - Verification Assertions`;
+3. OPERATIONAL BOUNDARIES:
+- Adhere strictly to modular architecture and clean code conventions.
+- Eliminate placeholders (never use '// TODO' or truncated blocks).
+- State all trade-offs, edge-case fallbacks, and runtime assertions.
 
-      codeBox.innerText = compiled;
-      const wordCount = compiled.split(/\s+/).length;
-      tokenCounter.innerText = `~${Math.round(wordCount * 1.3)} tokens estimated`;
-      showToast('Compiled successfully');
+4. EXECUTION SCHEMA:
+- [Phase 1] Architectural Decomposition & Pre-flight Validation
+- [Phase 2] Production-Grade Source Implementation
+- [Phase 3] Deterministic Verification Assertions`;
+
+      consoleBox.innerText = template;
+      showToast('System instruction compiled successfully!');
     }
 
-    function copyGenerated() {
-      const text = document.getElementById('compiledCode').innerText;
+    function copyOutput() {
+      const text = document.getElementById('outputConsole').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        showToast('Instruction copied');
+        showToast('Payload copied to clipboard!');
       });
     }
 
-    function copySnippet(btn) {
-      const text = btn.parentElement.querySelector('.select-all').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Node instruction copied');
-      });
+    function loadTemplate(type) {
+      const objInput = document.getElementById('promptObjective');
+      if (type === 'arch') {
+        objInput.value = "Architect an end-to-end fullstack scalable microservice system with Redis caching and PostgreSQL.";
+      } else if (type === 'agent') {
+        objInput.value = "Create an autonomous multi-step reasoning agent with Observation-Action-Verification loop.";
+      } else if (type === 'json') {
+        objInput.value = "Extract data and enforce strict deterministic JSON output conforming to predefined schema.";
+      } else if (type === 'debug') {
+        objInput.value = "Perform Root Cause Analysis on runtime stack trace and generate unified git diff fix.";
+      }
+      compilePrompt();
+      document.getElementById('playground').scrollIntoView({ behavior: 'smooth' });
     }
-
-    // Dynamic subtle mouse light effect for bento cards
-    document.querySelectorAll('.bento-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-      });
-    });
   </script>
 </body>
 </html>
